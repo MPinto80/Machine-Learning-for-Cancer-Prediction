@@ -20,7 +20,3 @@ print(df['Cancer_Type'].value_counts())
 #plotbar for easier visualization
 df['Cancer_Type'].value_counts().plot.bar()
 plt.show()
-
-
-
-
