@@ -1,16 +1,13 @@
 from sklearn.feature_selection import mutual_info_classif
-from data_preprocessing import x_train_norm, y_train, x_test_norm
 import numpy as np
 
-mi = mutual_info_classif(x_train_norm, y_train)[0]
+def select_features(x_train_norm, x_test_norm, y_train, n_features):
+    print(f'Selecting top {n_features} features (this may take 30-60 seconds)...')
+    mi = mutual_info_classif(x_train_norm, y_train)
 
-# select top n features
-n_features = 300
-selected_scores_indices = np.argsort(mi)[::-1][0:n_features]
+    selected_scores_indices = np.argsort(mi)[::-1][0:n_features]
 
-x_train_selected = x_train_norm[:, selected_scores_indices]
-x_test_selected = x_test_norm[:, selected_scores_indices]
-
-if __name__ == '__main__':
-    print(x_train_selected.shape)
-    print(x_test_selected.shape)
+    x_train_selected = x_train_norm[:, selected_scores_indices]
+    x_test_selected = x_test_norm[:, selected_scores_indices]
+    
+    return x_train_selected, x_test_selected

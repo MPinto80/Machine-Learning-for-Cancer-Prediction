@@ -1,13 +1,21 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multiclass import OneVsRestClassifier
+import joblib
+import os
 
-from data_preprocessing import y_train
-from feature_selection import x_train_selected, x_test_selected
+def train_model(x_train_selected, y_train, max_features):
+    print('Training Random Forest Classifier...')
+    rf = OneVsRestClassifier(RandomForestClassifier(max_features=max_features))
+    rf.fit(x_train_selected, y_train)
+    return rf
 
-#random forest classifier
-#since we are dealing with multiclass data, the one versus rest strategy is used
+def save_model(model, filepath):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    joblib.dump(model, filepath)
+    print(f'Model saved to {filepath}')
 
-rf=OneVsRestClassifier(RandomForestClassifier(max_features=0.2))
-rf.fit(x_train_selected,y_train)
-y_pred = rf.predict(x_test_selected)
-pred_prob = rf.predict_proba(x_test_selected)
+def load_model(filepath):
+    if os.path.exists(filepath):
+        print(f'Loading model from {filepath}...')
+        return joblib.load(filepath)
+    return None
